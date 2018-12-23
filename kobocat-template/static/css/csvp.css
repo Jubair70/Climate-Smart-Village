@@ -1,0 +1,117 @@
+.page-content {
+		margin-top: -15px;
+	}
+	.marker {
+		display: block;
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+		padding: 0;
+	}
+	.nav-tabs>li>a {
+		font-size: 12px;
+		font-weight: 600;
+		color: #57913c !important;
+	}
+	.nav-tabs>li.active>a{
+		font-size: 12px;
+	}
+	.page-title-custom {
+		font-weight: 600 !important;
+	}
+	.upper-div {
+		margin-top: 10px;
+		border-bottom: 1px solid #ddd;
+		margin-bottom: 10px;
+		padding-bottom: 5px;
+	}
+	.stripe-background {
+		background: repeating-linear-gradient(
+			  45deg,
+			  #abef9b,
+			  #abef9b 10px,
+			  #57913c 10px,
+			  #57913c 20px
+		);
+	}
+	.page-title-csvp{
+	    color: #57913c;
+	    font-size: 18px;
+		font-weight: 600;
+	}
+
+	.accordion-heading {
+    	background-color: #ffffff;
+    	margin-bottom: 5px;	
+	}
+	.accordion-toggle {
+		color: #57913c;
+	    font-size: 18px;
+	}
+	.accordion-toggle a:hover, a:focus {
+		color: #57913c;
+	}
+	.legend-box {
+		width: 25% !important;
+		border: 2px solid #eee;
+	    height: 450px;
+	    padding: 5px;
+	    overflow-y: overlay;
+    	background-color: #f0ede5;
+	}
+	.hide_lang {
+		display: none;
+	}
+	#lang-switch {
+		width: 100px;
+	}
+	.village-label{
+	    border-bottom: 2px solid #95e072;
+		font-size: 14px;
+		padding: 5px;
+	}
+	.gen-btn {
+		margin-top:24px;
+	}
+
+	.rectangle_color {
+		vertical-align: middle; 
+		display: inline-block;
+		width:24px;
+		height:22px;
+	}
+	.line_color {
+		vertical-align: middle; 
+		display: inline-block;
+		width:24px;
+		height:4px;
+		margin-top: 9px;
+		margin-bottom: 9px;
+	}
+
+	.marg-btn {
+		margin-right: 10px;
+	}
+	.dashboard-stat.welthungerhilfe {
+		background-color: #fff !important;
+		border-bottom: 3px solid #57913c;
+	}'
+	.dashboard-stat .jqcloud{
+		height: 150px!important;
+	}
+	.dashboard-stat .details .desc {
+    	font-weight: 800;
+	}
+.nav>li>a {
+    padding: 10px 9px;
+}
+.dashboard-stat .details .number {
+	color: #57913c;
+    font-weight: 600;
+}
+.dashboard-stat .details .desc {
+	color: #57913c;
+}
+thead{
+	background-color: #eee;
+}

@@ -1,0 +1,1350 @@
+{% extends 'base_test.html' %}
+{% load i18n %}
+{% block additional-headers %}
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+<link href="{{ STATIC_URL }}css/BootSideMenu.css" rel="stylesheet">
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.css' rel='stylesheet'/>
+<style>
+    .toggler{
+        background-color: #eee;
+    }
+    .page-content {
+        margin-top: -15px;
+    }
+    .highlight{
+        font-size: 16px;
+    }
+    .page-content{
+        margin-left:0 !important;
+    }
+    a:hover, a:focus {
+        text-decoration: none;
+        #map_container { position: relative; overflow: hidden;}
+    }
+    .project-caption {
+        color: #666;
+        margin-left: 2%;
+        border-bottom: 1px solid #666;
+        border-top: 1px solid #666;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .right-border{
+        border-right: 1px solid #666;
+        text-align: center;
+    }
+    .list-group-item{
+        border:none;
+    }
+    .project-portlet-header{
+        color: #666;
+        font-size: 14px;
+        text-align: center;
+    }
+    .shahin-toggler{
+        cursor:pointer;
+    }
+    h5 {
+        text-align: center;
+        font-weight: 600 !important;
+    }
+    .caption { color: #333; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h3 class="page-title"><strong>TetraPak</strong></h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1_1" data-toggle="tab">Projects</a></li>
+            <li class=""><a href="#tab_1_2" data-toggle="tab">Insight</a></li>
+            <li class=""><a href="#tab_1_3" data-toggle="tab">Analytics</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade" id="tab_1_3">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_1_1_1" data-toggle="tab">Milk Penetration</a></li>
+                    <li class=""><a href="#tab_1_1_2" data-toggle="tab">Milk Consumption</a></li>
+                    <li class=""><a href="#tab_1_1_3" data-toggle="tab">Consumer Behaviour</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="tab_1_1_1">
+                        <div class="row">
+                            <!-- <div style="margin-right: 15px;" class="shahin-toggler pull-right"><i
+                            class="fa fa-2x fa-bars"></i></div> -->
+                            <div id="graph_box" class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!--Map Section-->
+                                        <div style="height:465px;width: 100%;" id="map_container"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--chart Section-->
+                                        <div class="row">
+                                            <div style="height:250px;" id="bar_chart_1"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="height:250px;" id="bar_chart_2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!--Pie chart section -->
+                                        <div class="portlet box ">
+                                            <div class="portlet-title">
+                                                <div class="caption"><i class="fa fa-pie-chart"></i>Brand Share By
+                                                    Category
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div style="height:250px;" id="pie_chart_1"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div style="height:250px;" id="pie_chart_2"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div style="height:250px;" id="pie_chart_3"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div style="height:250px;" id="pie_chart_4"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab_1_1_2">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Location-Wise Monthy Avg Milk Consumption by Category (Ltr/Kg)</h5>
+                                <!-- map container -->
+                                <div class="mapbox-mpower" style="height:708px;width: 100%;"" id="consumption_map"></div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="row">
+                                        <div style="height:250px;" id="consumption-location"></div>
+                                </div>
+                                <div class="row">
+                                        <div style="height:250px;" id="consumption-income"></div>
+                                </div>
+                                <div class="row">
+                                <div class="col-md-12">
+                                    <h5>Category-Wise Monthly Consumption Frequency</h5>
+                                <div class="table-responsive">
+                                    <table id="dyntable" class="table table-striped table-condensed table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Consumption Frequency</th>
+                                                <th class="text-right">PL</th>
+                                                <th class="text-right">POW</th>
+                                                <th class="text-right">UHT</th>
+                                                <th class="text-right">UPL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="row">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab_1_1_3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Location-Wise Brand Share</h5>
+                                <!-- map container -->
+                                <div class="mapbox-mpower" style="height:625px;width: 100%;" id="brand-share-map"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                        <div style="height:250px;" id="brand-region-income"></div>
+                                </div>
+                                <h5>Consumer Purchase Behaviour</h5>
+                                <div class="row">
+                                    <div class="table-responsive">
+                                    <table id="cpbft" class="table table-striped table-condensed table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>SKU Preferences</th>
+                                                <th class="text-right">% of Total</th>
+                                                <th class="text-right">Monthly Avg SKU</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="table-responsive">
+                                    <table id="cpbst" class="table table-striped table-condensed table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Purchase Source</th>
+                                                <th class="text-right">% of Total</th>
+                                                <th class="text-right">Avg. Purchase Frequency</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_1_2">
+                <div class="row">
+                    <div class="col-md-5">
+			<div class="portlet box">
+                            <div class="portlet-title">
+                                <div style="color: #666;" class="caption">Key Insights</div>
+                            </div>
+                        <!--map data-->
+                        <!-- <div class="mapbox-mpower" style="height:480px;width: 100%;" id="bmap_container"> 
+
+                        </div>-->
+                        <div class="portlet-body">
+                            <ul class="list-group" style="font-size: 14px !important;">
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>Almost all the respondents’ households (<strong class="highlight">99%</strong>) consume at least <strong class="highlight">1</strong> type of white milk.</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i><strong class="highlight">52%</strong> of the respondents consume packed pasteurized liquid milk</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i><strong class="highlight">50%</strong> of the respondents consume powder milk</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>Liquid UHT is yet to gain popularity</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>In Dhaka <strong class="highlight">83%</strong> respondents’ HH consume PL</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>In Chittagong powder milk is mostly preferred (by <strong class="highlight">93%</strong>) whereas, the category is not very popular in Rajshahi (only 10% consume it)</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>In Rajshahi almost all households (<strong class="highlight">95%</strong>) consume UPL</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>A positive correlation has been observed between HH Income level and UHT consumption</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>Pran is leading in UHT market with <strong class="highlight">67%</strong> share of the category followed by Arong with 22% share</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>In case of PL Milk Vita is leading with <strong class="highlight">69%</strong> market share; Aarong follows with 32%</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>Powder milk’s market is lead by Marks with <strong class="highlight">49%</strong> market share followed by Dano with 26%</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>More than one-third (<strong class="highlight">69%</strong>) of the powder milk consuming households also consume at least one type of liquid milk</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>Among the PL consumers 500 ml’s pack size is mostly preferred (<strong class="highlight">81%</strong>), 250 ml pack size seconds (<strong class="highlight">42%</strong>) in terms of preference</li>
+                            <li class="list-group-item"><i class="glyphicon glyphicon-eye-open"></i>Powder milk consumers prefer 500 mg’s pack most (<strong class="highlight">70%</strong>), the second preferred pack size is of 1 kg (<strong class="highlight">16%</strong>)</li>
+                            </ul>  
+                        </div>
+</div>
+                    </div>
+                    <div class="col-md-7">
+                        <!--tabular data-->
+                        <div class="portlet box">
+                            <div class="portlet-title">
+                                <div style="color: #666;" class="caption">Data Collection Status</div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-condensed table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th class="text-right">Target</th>
+                                                <th class="text-right">Completed</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Overall Sample</td>
+                                                <td class="text-right">200</td>
+                                                <td class="text-right">200</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Region</th>
+                                                <td class="text-right">150</td>
+                                                <td class="text-right">150</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Dhaka</td>
+                                                <td class="text-right">25</td>
+                                                <td class="text-right">25</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Chittagong</td>
+                                                <td class="text-right">80</td>
+                                                <td class="text-right">80</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Rajshahi</td>
+                                                <td class="text-right">50</td>
+                                                <td class="text-right">50</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet box">
+                            <div class="portlet-title">
+                                <div style="color: #666;" class="caption">Key Information</div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-condensed table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th class="text-right">Dhaka</th>
+                                                <th class="text-right">Chittagong</th>
+                                                <th class="text-right">Rajshahi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>Product Category</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <td>UHT</td>
+                                                <td class="text-right">200</td>
+                                                <td class="text-right">200</td>
+                                                <td class="text-right">200</td>
+                                            </tr>
+                                            <tr>
+                                                <td>PL</td>
+                                                <td class="text-right">150</td>
+                                                <td class="text-right">150</td>
+                                                <td class="text-right">150</td>
+                                            </tr>
+                                            <tr>
+                                                <td>POW</td>
+                                                <td class="text-right">25</td>
+                                                <td class="text-right">25</td>
+                                                <td class="text-right">25</td>
+                                            </tr>
+                                            <tr>
+                                                <td>UPL</td>
+                                                <td class="text-right">80</td>
+                                                <td class="text-right">80</td>
+                                                <td class="text-right">80</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade active in" id="tab_1_1">
+                <div class="row">
+                    <div class="col-md-4">
+                        <!-- BEGIN Portlet PORTLET-->
+                        <div class="portlet box green">
+                            <div class="portlet-title">
+                                <div class="project-portlet-header caption"><i class="fa fa-reorder"></i>New Projects
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Tetrapak New Survey</li>
+                                    <!--<li class="list-group-item">Test Project</li>-->
+                                    <!--<li class="list-group-item">Test Project</li>-->
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Portlet PORTLET-->
+                    </div>
+                    <div class="col-md-4">
+                        <!-- BEGIN Portlet PORTLET-->
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="project-portlet-header caption"><i class="fa fa-reorder"></i>Ongoing
+                                    Projects
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Tetrapak</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Portlet PORTLET-->
+                    </div>
+                    <div class="col-md-4">
+                        <!-- BEGIN Portlet PORTLET-->
+                        <div class="portlet box yellow">
+                            <div class="portlet-title">
+                                <div class="project-portlet-header caption"><i class="fa fa-reorder"></i>Past Projects
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Tetrapak Project-1</li>
+                                    <li class="list-group-item">Tetrapak Project-2</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END Portlet PORTLET-->
+                    </div>
+                </div>
+                <div class="row">
+                    <!--projects -->
+                    <div class="col-md-12">
+                        <div class="portlet-box">
+                            <div class="portlet-title">
+                                <div style="" class="project-caption">Status: <strong>Tetrapak</strong></div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="col-md-6">
+                                    <!--table-->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th class="text-right">Target</th>
+                                                    <th class="text-right">Completed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Dhaka</td>
+                                                    <td class="text-right">200</td>
+                                                    <td class="text-right">200</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chittagong</td>
+                                                    <td class="text-right">150</td>
+                                                    <td class="text-right">150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Rajshahi</td>
+                                                    <td class="text-right">25</td>
+                                                    <td class="text-right">25</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- project progress -->
+                                    <div style="margin-top: 5%;"></div>
+                                    <div class="row">
+                                        <div class="col-md-2 right-border">Research Design</div>
+                                        <div class="col-md-3 right-border">Tool Design</div>
+                                        <div class="col-md-3 right-border">Data Collection</div>
+                                        <div class="col-md-2 right-border">Data Cleaning</div>
+                                        <div class="col-md-2">Insight Generator</div>
+                                    </div>
+                                    <div style="margin-top: 5%;"></div>
+                                    <div class="row">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" style="width: 66.67%">
+                                                <span class="sr-only">35% Complete (success)</span>
+                                            </div>
+                                            <div class="progress-bar progress-bar-warning" style="width: 16.66%">
+                                                <span class="sr-only">20% Complete (warning)</span>
+                                            </div>
+                                            <div class="progress-bar progress-bar-danger" style="width: 16.67%">
+                                                <span class="sr-only">10% Complete (danger)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display:none">
+                    <!--projects -->
+                    <div class="col-md-12">
+                        <div class="portlet-box">
+                            <div class="portlet-title">
+                                <div style="" class="project-caption">Status: <strong>Project 2</strong></div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="col-md-6">
+                                    <!--table-->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-condensed table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th class="text-right">Target</th>
+                                                    <th class="text-right">Completed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Item 1</td>
+                                                    <td class="text-right">200</td>
+                                                    <td class="text-right">75</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Item 2</td>
+                                                    <td class="text-right">150</td>
+                                                    <td class="text-right">100</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Item 3</td>
+                                                    <td class="text-right">25</td>
+                                                    <td class="text-right">25</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Item 4</td>
+                                                    <td class="text-right">80</td>
+                                                    <td class="text-right">33</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Item 5</td>
+                                                    <td class="text-right">50</td>
+                                                    <td class="text-right">14</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- project progress -->
+                                    <div style="margin-top: 5%;"></div>
+                                    <div class="row">
+                                        <div class="col-md-2 right-border">Research Design</div>
+                                        <div class="col-md-3 right-border">Tool Design</div>
+                                        <div class="col-md-3 right-border">Data Collection</div>
+                                        <div class="col-md-2 right-border">Data Cleaning</div>
+                                        <div class="col-md-2">Insight Generator</div>
+                                    </div>
+                                    <div style="margin-top: 5%;"></div>
+                                    <div class="row">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" style="width: 45%">
+                                                <span class="sr-only">35% Complete (success)</span>
+                                            </div>
+                                            <div class="progress-bar progress-bar-warning" style="width: 10%">
+                                                <span class="sr-only">20% Complete (warning)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="filter_box">
+            <div class="portlet box ">
+                <div class="portlet-title">
+                    <div class="caption pull-right"><i class="fa fa-filter"></i>Filters</div>
+                </div>
+                <div class="portlet-body">
+                    <div class="panel-group accordion" id="accordion1">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse"
+                                    data-parent="#accordion1"
+                                    href="#collapse_1">
+                                    Location
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse_1" class="panel-collapse in">
+                            <div class="panel-body">
+                                <div class="checkbox-list">
+                                    <label>
+                                        <span><input name="region[]" type="checkbox"
+                                           value="Dhaka"></span> Dhaka
+                                       </label>
+                                       <label>
+                                        <span><input name="region[]" type="checkbox"
+                                           value="Chittagong"></span>Chittagong
+                                       </label>
+                                       <label>
+                                        <span><input name="region[]" type="checkbox"
+                                           value="Rajshahi"></span> Rajshahi
+                                       </label>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle" data-toggle="collapse"
+                                data-parent="#accordion1"
+                                href="#collapse_2">
+                                Milk Type
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse_2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="checkbox-list">
+                                <label>
+                                    <span><input name="category[]" type="checkbox"
+                                       value="PL"></span> PL
+                                   </label>
+                                   <label>
+                                    <span><input name="category[]" type="checkbox"
+                                       value="POW"></span>POW
+                                   </label>
+                                   <label>
+                                    <span><input name="category[]" type="checkbox"
+                                       value="UHT"></span> UHT
+                                   </label>
+                                   <label>
+                                    <span><input name="category[]" type="checkbox"
+                                       value="UPL"></span> UPL
+                                   </label>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse"
+                                    data-parent="#accordion1"
+                                    href="#collapse_3">
+                                    Brand Type
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse_3" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="checkbox-list">
+                                    <label>
+                                        <span><input name="brands[]" type="checkbox"
+                                           value="Arla"></span> Arla
+                                       </label>
+                                       <label>
+                                        <span><input name="brands[]" type="checkbox"
+                                           value="Arong"></span>Arong
+                                       </label>
+                                       <label>
+                                        <span><input name="brands[]" type="checkbox"
+                                           value="Cow,s  milk"></span> Cow's Milk
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Dano"></span> Dano
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Danish"></span> Danish
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Farm fresh"></span> Farm Fresh
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Hazardinj farm"></span> Hazardinj farm
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="liza dairy"></span> liza dairy
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Marks"></span> Marks
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Milk Vita"></span> Milk Vita
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Non Brand"></span> Non Brand
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Others"></span> Others
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="Pran"></span> Pran
+                                       </label>
+                                       <label>
+                                       <span><input name="brands[]" type="checkbox"
+                                           value="StarShip"></span> StarShip
+                                       </label>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle" data-toggle="collapse"
+                                    data-parent="#accordion1"
+                                    href="#collapse_4">
+                                    Monthly Household income
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse_4" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="checkbox-list">
+                                    <label>
+                                        <span><input name="income[]" type="checkbox"
+                                           value="BDT 15001 to BDT 20,000"></span> 11k -15k
+                                       </label>
+                                       <label>
+                                        <span><input name="income[]" type="checkbox"
+                                           value="BDT 11,001 to BDT 15,000"></span>15k -20k
+                                       </label>
+                                       <label>
+                                        <span><input name="income[]" type="checkbox"
+                                           value="BDT 25001 to BDT 30,000"></span> 20k -25k
+                                       </label>
+                                       <label>
+                                       <span><input name="income[]" type="checkbox"
+                                           value="BDT 20001 to BDT 25,000"></span> 25k -30k
+                                       </label>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+               </div>
+               <div class="form-actions">
+                <input onclick="applyFilter();" type="button" id="filter_btn"
+                class="btn pull-right" name="filter_btn"
+                value="Apply"/>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block additional-javascript %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/d2dashboard.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.js'></script>
+<script src="{{ STATIC_URL }}js/BootSideMenu.js" type="text/javascript"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/bd_geo_json.js"></script>
+<script type="text/javascript">
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href")
+        map.resize();
+        //second_map.resize();
+        third_map.resize();
+        fourth_map.resize();
+    });
+
+    //var milk = ['UHT','PL','POW','UPL'];
+    var milk = ['PL','UPL','UHT','POW'];
+    var regions = ['Dhaka','Chittagong','Rajshahi','Total'];
+    $(document).ready(function() {
+        $('#filter_box').BootSideMenu({
+          side: "right",
+          // animation speed
+          duration: 500,
+          // restore last menu status on page refresh
+          remember: false,
+          // auto close
+          autoClose: false,
+          // push the whole page
+          pushBody: true,
+          // close on click
+          closeOnClick: true,
+          // width
+          width: "25%"
+          
+      });
+
+        createDonutChart('pie_chart_1', 'UHT', uht_pie);
+        createDonutChart('pie_chart_2', 'PL', pl_pie);
+        createDonutChart('pie_chart_3', 'POW', pow_pie);
+        createDonutChart('pie_chart_4', 'UPL', upl_pie);
+
+        createBarChart('bar_chart_1', 'Category-wise whilte milk penetration by location', location_bc, 'column',milk);
+        createBarChart('bar_chart_2', 'Category-wise whilte milk penetration by income group (BDT)', income_bc, 'column',milk);
+
+    //second page
+    createBarChartwithoupercent('consumption-location', 'Category-Wise White Milk Monthly Average Consumption by Location', consumption_first, 'column',milk);
+    createBarChartwithoupercent('consumption-income', 'Category-Wise White Milk Monthly Average Consumption by Location', consumption_second, 'column',milk);
+
+    //third page
+    createBarChartwithoupercent('brand-region-income', 'Location-Wise White Milk Monthy Avg Consumption by Income Group', cpbbc_data, 'column',['11K-15K','15K-20K','20K-25K','25K-30K']);
+
+    $('.mapboxgl-canvas').css("width", "100%");
+    $('.mapboxgl-canvas').css("position", "relative");
+});
+
+    /************* chart data  **************************/
+    var get_data_json = "{% url "onadata.apps.main.views.searchByRegionCat" %}"
+    var table_data = {{ table_data|safe }};
+    var pow_pie = {{ pow_pie|safe }};
+    var pl_pie = {{ pl_pie|safe }};
+    var uht_pie = {{ uht_pie|safe }};
+    var upl_pie = {{ upl_pie|safe }};
+    var location_bc = {{ location_bc|safe }};
+    var income_bc = {{ income_bc|safe }};
+    var consumption_first = {{ consumption_first|safe }};
+    var consumption_second = {{ consumption_second|safe }};
+    var cpbft_data = {{ cpbft_data|safe }}
+    var cpbst_data = {{ cpbst_data|safe }}
+    var cpbbc_data = {{ cpbbc_data|safe }}
+
+    /****************table data*************/
+    var tbody = generateTableRowsallpercent(table_data);    
+    $("#dyntable").find('tbody').html(tbody);
+    var cpbft_tbody = generateTableRowspercent(cpbft_data, true);
+    $("#cpbft").find('tbody').html(cpbft_tbody);
+    var cpbst_tbody = generateTableRowspercent(cpbst_data, false);
+    $("#cpbst").find('tbody').html(cpbst_tbody);
+
+
+    map_locations = location_bc.map(function(a) {
+        return a.name;
+    });
+    var data = loadMap(map_locations);
+    /************** map data ****************************/
+//var milk = ['UHT','PL','POW','UPL'];
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhaGludWwwNiIsImEiOiJjaXhlNXFmejAwMGUxMnlsZnFjNWRqeWZlIn0.lcY1S8rAdPxOnS345VH3Cg';
+var map = new mapboxgl.Map({
+    container: 'map_container',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [90.4318923950197, 23.614151000976676],
+    zoom: 5.5
+});
+
+map.on('load', function() {
+    map.addSource('bangladesh', {
+        'type': 'geojson',
+        'data': JSON.parse('{ "type": "FeatureCollection","features": [' + data + ']}')
+    });
+
+    map.addLayer({
+        'id': 'bangladesh',
+        'type': 'fill',
+        'source': 'bangladesh',
+        'layout': {},
+        'paint': {
+            'fill-color': {
+	     	property: 'innverdiv',
+		type: "categorical",
+                stops: [['Rajshahi', '#90ed7d'],['Chittagong', '#7474e8'],['Dhaka', '#5c5c61']]
+	     },
+            'fill-opacity': 0.8
+        }
+    });
+});
+
+map.on('click', function(e) {
+    var features = map.queryRenderedFeatures(e.point, {
+        layers: ['bangladesh']
+    });
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+    var outerdiv = feature.properties.outerdiv;
+    var innverdiv = feature.properties.innverdiv;
+
+    var districtFiltered = filterByProperty(location_bc,'name',innverdiv);
+    var pieArr = districtFiltered[0].data;
+    var hcDataseries = [];
+    pieArr.forEach(function(element,index) {
+        var hcdsobj = { 'name':milk[index], 'y':element };
+        hcDataseries.push(hcdsobj);
+    });
+
+    pieChartOptions.series = [{
+        name: 'Milk Type',
+        colorByPoint: true,
+        data: hcDataseries
+    }]
+
+    var popup = new mapboxgl.Popup()
+    .setLngLat(map.unproject(e.point))
+    .setHTML(feature.properties.description)
+    .addTo(map);
+
+    $('#' + outerdiv).find('#' + innverdiv).highcharts(pieChartOptions);
+});
+
+/**************** second map *************************/
+
+/*var second_map = new mapboxgl.Map({
+    container: 'bmap_container',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [90.4318923950197, 23.614151000976676],
+    zoom: 5.5
+});
+
+second_map.on('load', function() {
+    second_map.addSource('bangladesh', {
+        'type': 'geojson',
+        'data': JSON.parse('{ "type": "FeatureCollection","features": [' + data + ']}')
+    });
+
+    second_map.addLayer({
+        'id': 'bangladesh',
+        'type': 'fill',
+        'source': 'bangladesh',
+        'layout': {},
+        'paint': {
+            'fill-color': '#088',
+            'fill-opacity': 0.8
+        }
+    });
+});
+
+second_map.on('click', function(e) {
+    var features = second_map.queryRenderedFeatures(e.point, {
+        layers: ['bangladesh']
+    });
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+    var outerdiv = feature.properties.outerdiv;
+    var innverdiv = feature.properties.innverdiv;
+
+    var districtFiltered = filterByProperty(location_bc,'name',innverdiv);
+    var pieArr = districtFiltered[0].data;
+    var hcDataseries = [];
+    pieArr.forEach(function(element,index) {
+        var hcdsobj = { 'name':milk[index], 'y':element };
+        hcDataseries.push(hcdsobj);
+    });
+
+    pieChartOptions.series = [{
+        name: 'Milk Type',
+        colorByPoint: true,
+        data: hcDataseries
+    }]
+
+    var popup = new mapboxgl.Popup()
+    .setLngLat(second_map.unproject(e.point))
+    .setHTML(feature.properties.description)
+    .addTo(second_map);
+
+    $('#' + outerdiv).find('#' + innverdiv).highcharts(pieChartOptions);
+});*/
+
+
+/**************** third map *************************/
+
+var third_map = new mapboxgl.Map({
+    container: 'consumption_map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [90.4318923950197, 23.614151000976676],
+    zoom: 6.5
+});
+
+third_map.on('load', function() {
+    third_map.addSource('bangladesh', {
+        'type': 'geojson',
+        'data': JSON.parse('{ "type": "FeatureCollection","features": [' + data + ']}')
+    });
+
+    third_map.addLayer({
+        'id': 'bangladesh',
+        'type': 'fill',
+        'source': 'bangladesh',
+        'layout': {},
+        'paint': {
+            'fill-color': {
+	     	property: 'innverdiv',
+		type: "categorical",
+                stops: [['Rajshahi', '#90ed7d'],['Chittagong', '#7474e8'],['Dhaka', '#5c5c61']]
+	     },
+            'fill-opacity': 0.8
+        }
+    });
+});
+
+third_map.on('click', function(e) {
+    var features = third_map.queryRenderedFeatures(e.point, {
+        layers: ['bangladesh']
+    });
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+    var outerdiv = feature.properties.outerdiv;
+    var innverdiv = feature.properties.innverdiv;
+
+    var districtFiltered = filterByProperty(consumption_first,'name',innverdiv);
+    var pieArr = districtFiltered[0].data;
+    var hcDataseries = [];
+    pieArr.forEach(function(element,index) {
+        var hcdsobj = { 'name':milk[index], 'y':element };
+        hcDataseries.push(hcdsobj);
+    });
+
+    pieChartOptions.series = [{
+        name: 'Milk Type',
+        colorByPoint: true,
+        data: hcDataseries
+    }]
+
+    var popup = new mapboxgl.Popup()
+    .setLngLat(third_map.unproject(e.point))
+    .setHTML(feature.properties.description)
+    .addTo(third_map);
+
+    $('#' + outerdiv).find('#' + innverdiv).highcharts(pieChartOptions);
+});
+
+
+/**************** fourth map *************************/
+
+var fourth_map = new mapboxgl.Map({
+    container: 'brand-share-map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [90.4318923950197, 23.614151000976676],
+    zoom: 6.5
+});
+
+fourth_map.on('load', function() {
+    fourth_map.addSource('bangladesh', {
+        'type': 'geojson',
+        'data': JSON.parse('{ "type": "FeatureCollection","features": [' + data + ']}')
+    });
+
+    fourth_map.addLayer({
+        'id': 'bangladesh',
+        'type': 'fill',
+        'source': 'bangladesh',
+        'layout': {},
+        'paint': {
+            'fill-color': {
+	     	property: 'innverdiv',
+		type: "categorical",
+                stops: [['Rajshahi', '#90ed7d'],['Chittagong', '#7474e8'],['Dhaka', '#5c5c61']]
+	     },
+            'fill-opacity': 0.8
+        }
+    });
+});
+
+fourth_map.on('click', function(e) {
+    var features = fourth_map.queryRenderedFeatures(e.point, {
+        layers: ['bangladesh']
+    });
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+    var outerdiv = feature.properties.outerdiv;
+    var innverdiv = feature.properties.innverdiv;
+
+    var districtFiltered = filterByProperty(cpbbc_data,'name',innverdiv);
+    var pieArr = districtFiltered[0].data;
+    var hcDataseries = [];
+    pieArr.forEach(function(element,index) {
+        var hcdsobj = { 'name':milk[index], 'y':element };
+        hcDataseries.push(hcdsobj);
+    });
+
+    pieChartOptions.series = [{
+        name: 'Milk Type',
+        colorByPoint: true,
+        data: hcDataseries
+    }]
+
+    var popup = new mapboxgl.Popup()
+    .setLngLat(fourth_map.unproject(e.point))
+    .setHTML(feature.properties.description)
+    .addTo(fourth_map);
+
+    $('#' + outerdiv).find('#' + innverdiv).highcharts(pieChartOptions);
+});
+
+/******************* highchart config *****************/
+var pieChartOptions = {
+    chart: {
+        backgroundColor: 'transparent',
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie',
+        margin: [0, 0, 0, 0],
+        spacingTop: 0,
+        spacingBottom: 0,
+        spacingLeft: 0,
+        spacingRight: 0,
+        height: 100,
+        width: 100
+    },
+    title: {
+        text: ''
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            size: '100%',
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            }
+        }
+    },
+    credits: {
+        enabled: false
+    }
+}
+
+function applyFilter() {
+    //populate first bar chart according to filter
+    var location_bc_filter = '';
+    var category_bc_filter = '';
+    var income_range_filter = '';
+    var brand_range_filter = '';
+    var map_filter_locations = [];
+
+    $("input[name='region[]']").each(function() {
+        if ($(this).is(':checked')) {
+            if (location_bc_filter == '') {
+                location_bc_filter += $(this).val();
+            } else {
+                location_bc_filter += '_' + $(this).val();
+            }
+            map_filter_locations.push($(this).val());
+        }
+    });
+
+    $("input[name='category[]']").each(function() {
+        if ($(this).is(':checked')) {
+            if (category_bc_filter == '') {
+                category_bc_filter += $(this).val();
+            } else {
+                category_bc_filter += '_' + $(this).val();
+            }
+        }
+    });
+
+    $("input[name='income[]']").each(function() {
+        if ($(this).is(':checked')) {
+            if (income_range_filter == '') {
+                income_range_filter += $(this).val();
+            } else {
+                income_range_filter += '_' + $(this).val();
+            }
+        }
+    });
+
+    $("input[name='brands[]']").each(function() {
+        if ($(this).is(':checked')) {
+            if (brand_range_filter == '') {
+                brand_range_filter += $(this).val();
+            } else {
+                brand_range_filter += '_' + $(this).val();
+            }
+        }
+    });
+    
+    if(location_bc_filter == '') {
+        location_bc_filter = 'Dhaka_Chittagong_Rajshahi';
+    }
+
+    if(category_bc_filter == '') {
+        category_bc_filter = 'PL_POW_UHT_UPL';
+    }
+
+    if(income_range_filter == '') {
+        income_range_filter = 'BDT 15001 to BDT 20,000_BDT 11,001 to BDT 15,000_BDT 25001 to BDT 30,000_BDT 20001 to BDT 25,000';
+    }
+
+    if(brand_range_filter == '') {
+        brand_range_filter = 'Arong_Arla_Arong_Cow,s  milk_Danish_Dano_Diploma_Farm fresh_Fresh_Hazardinj farm_liza dairy_Marks_Milk Vita_Nido_Non Brand_Others_Pran_StarShip';
+    }
+
+    $.ajax({
+        url: get_data_json,
+        type: "POST",
+        data: {
+            category: category_bc_filter,
+            region: location_bc_filter,
+            income: income_range_filter,
+            brands: brand_range_filter
+        },
+        success: function(response) {
+            $('.mapboxgl-popup').remove();
+                createBarChart('bar_chart_1', 'Category-wise whilte milk penetration by location', response['location_bc'], 'column',milk);
+                createBarChart('bar_chart_2', 'Category-wise whilte milk penetration by income group (BDT)', response['income_bc'], 'column',milk);
+
+                createBarChart('consumption-location', 'Category-Wise White Milk Monthly Average Consumption by Location', response['f_con'], 'column',milk);
+                createBarChart('consumption-income', 'Category-Wise White Milk Monthly Average Consumption by Location', response['s_con'], 'column',milk);
+
+                tbody = generateTableRowsallpercent(JSON.parse(response['f_con_table']));    
+                $("#dyntable").find('tbody').html(tbody);                
+
+                cpbft_tbody = generateTableRowspercent(JSON.parse(response['cpbft_data']), true);                               
+                console.log(cpbft_tbody)
+                $("#cpbft").find('tbody').html(cpbft_tbody);
+
+                cpbst_tbody = generateTableRowspercent(JSON.parse(response['cpbst_data']), false);
+                $("#cpbst").find('tbody').html(cpbst_tbody);
+
+            
+            var filter_data = loadMap(map_filter_locations);
+            
+            if(filter_data == ''){
+                filter_data = data;
+            }
+            if (map.getSource('bangladesh')){
+                map.removeSource('bangladesh');
+            }
+
+            if (map.getLayer('bangladesh')){
+                map.removeLayer('bangladesh');
+            }
+            
+
+            map.addSource('bangladesh', {
+                'type': 'geojson',
+                'data': JSON.parse('{ "type": "FeatureCollection","features": [' + filter_data + ']}')
+            });
+
+            map.addLayer({
+                'id': 'bangladesh',
+                'type': 'fill',
+                'source': 'bangladesh',
+                'layout': {},
+                'paint': {
+                    'fill-color': {
+		     	property: 'innverdiv',
+			type: "categorical",
+		        stops: [['Rajshahi', '#90ed7d'],['Chittagong', '#7474e8'],['Dhaka', '#5c5c61']]
+		     },
+                    'fill-opacity': 0.8
+                }
+            });
+        }
+    })
+}
+
+function loadMap(locations) {
+    var data = '';
+    for (var idx in locations) {
+        if (locations[idx] != 'Overall') {
+            var popup_template = "popup_template_" + locations[idx];
+            var pie_district = locations[idx];
+
+            if (idx < (locations.length - 1)) {
+                data += '{"type": "Feature","properties": {"fill": "#081dbe","fill-opacity": 0.5,"description": "<div id=\'' + popup_template + '\'><div id=\'' + pie_district + '\'></div></div>","outerdiv":"' + popup_template + '","innverdiv":"' + pie_district + '"},"geometry":' + JSON.stringify(totalGeoJson[locations[idx]]) + '}' + ',';
+            } else {
+                data += '{"type": "Feature","properties": {"fill": "#081dbe","fill-opacity": 0.5,"description": "<div id=\'' + popup_template + '\'><div id=\'' + pie_district + '\'></div></div>","outerdiv":"' + popup_template + '","innverdiv":"' + pie_district + '"},"geometry":' + JSON.stringify(totalGeoJson[locations[idx]]) + '}';
+            }
+        }
+    }
+    return data;
+}
+
+function filterByProperty(array, prop, value) {
+    var filtered = [];
+    for (var i = 0; i < array.length; i++) {
+        var obj = array[i];
+        if (obj[prop] == value) {
+            filtered.push(obj);
+        }
+    }
+    return filtered;
+}
+
+function generateTableRows(rowData,flag = false){
+    var tbody = '';
+    var len = rowData.length;
+    //console.log(rowData);
+    for(var i = 0; i < len; i++){
+        tbody += '<tr>'; 
+        for(var key in rowData[i]){
+            if((typeof rowData[i][key] == 'number') && (rowData[i][key] % 1 != 0)){
+                rowData[i][key] = rowData[i][key].toFixed(2) +" %";
+            }
+            if(key != 0){
+                tbody += '<td class="text-right">' + rowData[i][key] + '</td>'; 
+            } else if((key == 0) && (flag == true)) {
+                tbody += '<td>' + rowData[i][key] + ' gm</td>'; 
+            }
+            else {
+                tbody += '<td>' + rowData[i][key] + '</td>'; 
+            }
+        }
+        tbody += '</tr>';
+    }
+    return tbody;
+}
+function generateTableRowspercent(rowData,flag = false){
+    var tbody = '';
+    var len = rowData.length;
+    //console.log(rowData);
+    for(var i = 0; i < len; i++){
+        tbody += '<tr>'; 
+        for(var key in rowData[i]){
+            if((typeof rowData[i][key] == 'number') && (rowData[i][key] % 1 != 0)){
+                rowData[i][key] = rowData[i][key].toFixed(2) +" %";
+            }
+            if(key == 1){
+                tbody += '<td class="text-right">' + rowData[i][key] + '%</td>'; 
+            } 
+            else if(key != 0){
+                tbody += '<td class="text-right">' + rowData[i][key] + '</td>'; 
+            } 
+            else if((key == 0) && (flag == true)) {
+                tbody += '<td>' + rowData[i][key] + ' gm</td>'; 
+            }
+            else {
+                tbody += '<td>' + rowData[i][key] + '</td>'; 
+            }
+        }
+        tbody += '</tr>';
+    }
+    return tbody;
+}
+function generateTableRowsallpercent(rowData,flag = false){
+    var tbody = '';
+    var len = rowData.length;
+    //console.log(rowData);
+    for(var i = 0; i < len; i++){
+        tbody += '<tr>'; 
+        for(var key in rowData[i]){            
+            if(key == 0) {
+                tbody += '<td>' + rowData[i][key] + '</td>'; 
+            }
+            else {
+                tbody += '<td class="text-right">' + rowData[i][key] + ' %</td>'; 
+            }
+        }
+        tbody += '</tr>';
+    }
+    return tbody;
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base_test.html' %}
+{% load i18n %}
+{% block additional-headers %}
+<head>
+	<title>
+		{% block title %} CSVP {% endblock %}
+	</title>
+</head>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link href="{{STATIC_URL}}css/csvp.css" rel="stylesheet" type="text/css"/>
+<link href="{{STATIC_URL}}assets/plugins/data-tables/DT_bootstrap.css" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+<div class="row upper-div">
+	<div class="col-md-6">
+		<select id="lang-switch" onchange="changeLanguage(this);setCookie('lang',this.value)" class="form-control"><option value="b">Bangla</option><option value="e">English</option></select>
+	</div>
+</div>
+<div class="top-buffer"></div>
+<!-- <div class="row">
+	<div class="col-md-4">
+		<div class="form-group">
+		<label><span class="lang_en">District</span><span class="lang_bd hide_lang">জেলা</span></label>
+			<select class="form-control" id="district" name="district">
+				<option value="">Choose District</option>
+				<option value="1">Dhaka</option>
+				<option value="2">Chittagong</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+		<label><span class="lang_en">Upazilla</span><span class="lang_bd hide_lang">উপজেলা</span></label>
+			<select class="form-control" id="upazilla" name="upazilla">
+				<option value="">Choose Upazilla</option>
+				<option value="1">Dhaka</option>
+				<option value="2">Chittagong</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+		<label><span class="lang_en">Union</span><span class="lang_bd hide_lang">ইউনিয়ন</span></label>
+			<select class="form-control" id="union" name="union">
+				<option value="">Choose Union</option>
+				<option value="1">Dhaka</option>
+				<option value="2">Chittagong</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+		<label><span class="lang_en">Village</span><span class="lang_bd hide_lang">গ্রাম</span></label>
+			<select class="form-control" id="village" name="village">
+				<option value="">Choose Village</option>
+				<option value="1">Dhaka</option>
+				<option value="2">Chittagong</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+		<label><span class="lang_en">NGO</span><span class="lang_bd hide_lang">এনজিও</span></label>
+			<select class="form-control" id="ngo" name="ngo">
+				<option value="">Choose NGO</option>
+				<option value="1">Dhaka</option>
+				<option value="2">Chittagong</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-4">
+	<div class="form-group">
+		<button class="btn red gen-btn">Generate</button>
+		</div>
+	</div>
+</div> -->
+<div class="top-buffer"></div>
+<div class="row">
+<div class="col-md-12">
+<table id="villages-table" class="table table-bordered table-hover table-striped">
+	<thead>
+		<tr>
+			<th><span class="lang_en">District</span><span class="hide_lang lang_bd">জেলা</span></th>
+			<th><span class="lang_en">Thana</span><span class="hide_lang lang_bd">উপজেলা</span></th>
+			<th><span class="lang_en">Union</span><span class="hide_lang lang_bd">ইউনিয়ন</span></th>
+			<th><span class="lang_en">Village</span><span class="hide_lang lang_bd">গ্রাম</span></th>
+			<th><span class="lang_en">NGO</span><span class="hide_lang lang_bd">এনজিও</span></th>
+			<th><span class="lang_en">Population</span><span class="hide_lang lang_bd">জনসংখ্যা</span></th>
+			<th><span class="lang_en">Total</span><span class="hide_lang lang_bd">মোট খানা সংখ্যা</span></th>
+			<th><span class="lang_en"></span><span class="hide_lang lang_bd"></span></th>
+		</tr>
+	</thead>
+	<tbody>
+
+	</tbody>
+</table>
+</div>
+</div>
+{% endblock %}
+{% block additional-javascript %}
+<script src="{{ STATIC_URL }}assets/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.js"></script>
+<script src="{{ STATIC_URL }}assets/plugins/data-tables/DT_bootstrap.js"></script>
+<script src="{{ STATIC_URL }}js/csvp_scripts/singel_village.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var villages_list_data = {{ villages_list_data|safe }}
+	console.log(villages_list_data)
+	villagesListData = generateVillagesListTable(villages_list_data);
+	$('#villages-table').find('tbody').html(villagesListData);
+	
+	var set_lang;
+	if($.cookie('lang')){
+		set_lang = $.cookie('lang');
+	}
+	if (set_lang != ''){
+		$('#lang-switch').val(set_lang);
+		
+		if(set_lang == 'b'){
+			$('.lang_en').hide();
+			$('.lang_bd').show();
+		}
+	}
+
+	$('#villages-table').DataTable({
+		"bFilter": false,
+		"aoColumnDefs": [
+      		{ "bSortable": false, "aTargets": [ -1 ] }
+    	]
+	});
+	
+    $('#villages-table_wrapper .dataTables_length select').addClass("form-control input-xsmall");
+	});
+</script>
+{% endblock %}

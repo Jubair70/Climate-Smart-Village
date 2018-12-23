@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0.2
+Version: 1.5.4
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>Generate Report</title>
+    <meta name="description"
+          content="{% block meta_description %}KoBoToolbox is a free and open source suite of tools for field data collection for use in challenging environments.{% endblock %}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="author"/>
+    <meta name="author" content="">
+    {% if GOOGLE_SITE_VERIFICATION %}
+    <meta name="google-site-verification" content="{{ GOOGLE_SITE_VERIFICATION }}"/>
+    {% endif %}
+    <meta name="MobileOptimized" content="320">
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+    <link href="{{STATIC_URL}}assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN THEME STYLES -->
+    <link href="{{STATIC_URL}}assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}assets/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}assets/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}assets/css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link href="{{STATIC_URL}}assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+    <link href="{{STATIC_URL}}assets/css/custom.css" rel="stylesheet" type="text/css"/>
+    <!-- END THEME STYLES -->
+    <style type="text/css">
+        .htDimmed {
+            color:#fff !important;
+            background-color: #e02222 !important;
+        }
+
+
+
+
+
+    </style>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="stylesheet" media="screen" href="{{STATIC_URL}}pivot/css/style.css"/>
+    <link rel="stylesheet" media="screen" href="{{STATIC_URL}}pivot/css/handsontable.full.min.css"/>
+    <link rel="stylesheet" media="screen" href="{{STATIC_URL}}pivot/css/pivot.css"/>
+</head>
+<body class="page-header-fixed page-footer-fixed">
+<!-- BEGIN HEADER -->
+<div class="header navbar navbar-inverse navbar-fixed-top">
+    <!-- BEGIN TOP NAVIGATION BAR -->
+    <div class="header-inner">
+        <!-- BEGIN LOGO -->
+        <a class="navbar-brand" href="/">
+            <img alt="" src="{{STATIC_URL}}images/login_box_logo.png" width="auto" height="29"/>
+        </a>
+        <!-- END LOGO -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <img src="{{STATIC_URL}}assets/img/menu-toggler.png" alt=""/>
+        </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        <ul class="nav navbar-nav pull-right">
+            <!-- BEGIN USER LOGIN DROPDOWN -->
+            <li class="dropdown user">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                   data-close-others="true">
+                    <img alt="" src="{{STATIC_URL}}assets/img/avatar1_small.jpg"/>
+                    <span class="username">{{request.user|capfirst}}</span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="http://support.kobotoolbox.org/"><i class="fa fa-headphones"></i> Support</a></li>
+                    <!--<li class="divider"></li>-->
+                    <li><a href="{% url "auth_logout" %}"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                </ul>
+            </li>
+            <!-- END USER LOGIN DROPDOWN -->
+        </ul>
+        <!-- END TOP NAVIGATION MENU -->
+    </div>
+    <!-- END TOP NAVIGATION BAR -->
+</div>
+<!-- END HEADER -->
+<div class="clearfix"></div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {% include "topbar_test.html"%}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+        <!--<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        Widget settings form goes here
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn blue">Save changes</button>
+                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                &lt;!&ndash; /.modal-content &ndash;&gt;
+            </div>
+            &lt;!&ndash; /.modal-dialog &ndash;&gt;
+        </div>-->
+        <!-- /.modal -->
+        <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <!--<div class="col-md-12">
+                &lt;!&ndash; BEGIN PAGE TITLE & BREADCRUMB&ndash;&gt;
+                <h3 class="page-title">
+                    Blank Page
+                    <small>blank page</small>
+                </h3>
+                <ul class="page-breadcrumb breadcrumb">
+
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="index.html">Home</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">Layouts</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li><a href="#">Blank Page</a></li>
+                </ul>
+                &lt;!&ndash; END PAGE TITLE & BREADCRUMB&ndash;&gt;
+            </div>-->
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="portlet box red">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="fa fa-bar-chart-o"></i>Filters</div>
+                    </div>
+                    <div class="portlet-body">
+
+                            <div class="form-body">
+
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn red pull-right">Submit</button>
+                                <button style="margin-right:10px;" type="button" onclick="resetAll();"
+                                        class="btn default pull-right">Reset
+                                </button>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="portlet box red">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="fa fa-bar-chart-o"></i>{{ xform.title }}</div>
+                    </div>
+                    <div class="portlet-body">
+
+                        <div class="diagramWrapper">
+                            <div class="table-responsive" id="output" class="pane"></div>
+                        </div>
+                        <span class="changesOutput"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+        <!-- END PAGE -->
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    {% block additional-javascript %}
+    <script src="{{STATIC_URL}}assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"
+            type="text/javascript"></script>
+    <script src="{{STATIC_URL}}assets/plugins/jquery.cookie.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js"
+            type="text/javascript"></script>
+    <script src="{{STATIC_URL}}pivot/js/highstock.js"></script>
+    <script src="{{STATIC_URL}}pivot/js/highcharts-more.js"></script>
+    <script src="{{STATIC_URL}}pivot/js/modules/treemap.js"></script>
+    <script src="{{STATIC_URL}}pivot/js/pivot.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}pivot/js/handsontable.full.min.js" type="text/javascript"></script>
+
+    <script src="{{STATIC_URL}}pivot/js/novix.pivot.renderer.js"></script>
+    <script src="{{STATIC_URL}}pivot/js/hightchart_renderers.js"></script>
+    <script src="{{STATIC_URL}}assets/scripts/app.js"></script>
+    <script type="text/javascript">
+    var get_data_json = "{% url "onadata.apps.viewer.views.get_logger_instance" owner.username xform.id_string %}"
+    jQuery(document).ready(function() {
+        var renderers = $.extend({}, $.pivotUtilities.novix_renderers, $.pivotUtilities.highchart_renderers);
+        var json_array = [];
+        var sub_array = {};
+
+        $.ajax({
+            url: get_data_json,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                col_num = response.col_name.length;
+
+                response.col_name.forEach(function(element) {
+                    var formField = '<div class="form-group"><label>'+ capitalize(element) +'</label><input type="text" name="'+ element +'" class="form-control"></div>';
+                    $(".form-body").append(formField);
+                });
+
+                for (idx in response.data) {
+                    for (var i = 0; i < col_num; i++) {
+                        sub_array[response.col_name[i]] = response.data[idx][i];
+                    }
+                    json_array.push(sub_array);
+                }
+
+                
+            },
+            error: function() {
+                console.log("error");
+            }
+        });
+        App.init();
+    });
+
+    //clear all input fields
+    function resetAll() {
+        $(".form-body :input").val('');
+    }
+
+    //capitalize first letter
+    function capitalize(string) {
+        var splitStr = string.split(/[_-]+/);
+        var fullStr = '';
+        $.each(splitStr, function (index) {
+            var currentSplit = splitStr[index].charAt(0).toUpperCase() + splitStr[index].slice(1);
+            fullStr += currentSplit + " "
+        });
+        return fullStr;
+    }
+
+    //draw pivot table
+    function drawPivotTable(data) {
+	    $("#output").pivotUI(data, {
+		renderers: renderers,
+		rows: [],
+		cols: [],
+		rendererName: "Input Table",
+		rendererOptions: {
+		    onEditValues: function(changes) {
+		        $(".changesOutput").html(JSON.stringify(changes));
+		    },
+		    onDrawTable: function(htTable) {
+		        $(".changesOutput").empty();
+		    },
+		}
+	    });
+    }
+
+    </script>
+    {% endblock %}
+    {% include "footer_test.html" %}
+</body>
+</html>

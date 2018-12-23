@@ -1,0 +1,57 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+<div class="page-sidebar navbar-collapse collapse">
+    <!-- BEGIN SIDEBAR MENU -->
+    <ul class="page-sidebar-menu" style="margin-top: 30px;">
+        <li>
+            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+            <div class="sidebar-toggler hidden-phone"></div>
+            <div class="top-buffer"></div>
+            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+        </li>
+        <li class="{% if '/' == request.path %}active{% endif %} start">
+            <a href="/">
+                <i class="fa fa-home"></i>
+                <span class="title">Home Page</span>
+            </a>
+        </li>
+        <!-- <li class="">
+            <a href="">
+                <i class="fa fa-table"></i>
+                <span class="title">Data Management</span>
+            </a>
+        </li>
+        <li class="">
+            <a href="">
+                <i class="fa fa-cogs"></i>
+                <span class="title">Access Control</span>
+            </a>
+        </li> -->
+        {% for menu in main_menu_items %}
+        <li class="{% if menu.url == request.path %}active{% endif %}">
+            <a href="{{menu.url}}">
+                <i class="{{menu.icon_class}}"></i>
+                <span class="title">{{menu.title}}</span>
+            </a>
+            <ul class="sub-menu">
+            {% for submenu in sub_menu_items %}
+                {% if submenu.parent_menu_id == menu.id %}
+                    <li class="sub-menu-li {% if submenu.url == request.path %}active{% endif %}"><a
+                            href="{{submenu.url}}">{{submenu.title}}</a></li>
+                {% endif %}
+            {% empty %}
+            {% endfor %}
+            </ul>
+        </li>
+        {% empty %}
+        {% endfor %}
+        <li class="last">
+            <a href="{% url "auth_logout" %}">
+                <i class="fa fa-sign-out"></i>
+                <span class="title">{% trans "Sign out" %}</span>
+            </a>
+        </li>
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</div>
+{% endif %}
